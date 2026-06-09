@@ -290,7 +290,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 return
 
             wants_stream = body.get("stream", False) and not is_audio
-            target_model = body.get("model", "gpt-4o-mini")
+            target_model = "gpt-5.5"
             
             # Normalize model names to handle common user typos
             if target_model == "gpt5.5":
@@ -298,7 +298,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif target_model == "gpt5":
                 target_model = "gpt-5"
             elif target_model in ["4o mini", "4o-mini", "o4-mini"]:
-                target_model = "gpt-4o-mini"
+                target_model = "gpt-5.5"
             elif target_model in ["4o"]:
                 target_model = "gpt-4o"
             
