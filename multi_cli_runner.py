@@ -442,14 +442,19 @@ except Exception as e:
             print(f"[!] Server error: {e}")
 
 def _heartbeat_loop():
+    # Wait for the server to start before pinging
+    time.sleep(10)
     while True:
         try:
-            url = f"https://{NS_HASH}.edison-jupyter.newtonschool.co/api/status"
-            req = urllib.request.Request(url, headers={"Authorization": f"token {NS_HASH}", "User-Agent": "Mozilla/5.0"})
-            urllib.request.urlopen(req, context=CTX, timeout=10)
-        except:
-            pass
-        time.sleep(300) # Ping every 5 minutes to keep pod awake
+            # We must execute actual code in the kernel to reset the idle culler!
+            # A simple HTTP GET to /api/status is ignored by Jupyter's culler.
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(exec_in_pod_live("print('heartbeat ping')"))
+        except Exception as e:
+            print(f"[-] Heartbeat failed: {e}")
+        # Ping every 3 minutes
+        time.sleep(180)
 
 if __name__ == "__main__":
     threading.Thread(target=_heartbeat_loop, daemon=True).start()
