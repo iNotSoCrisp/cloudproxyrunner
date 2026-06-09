@@ -450,7 +450,7 @@ def _heartbeat_loop():
 if __name__ == "__main__":
     threading.Thread(target=_heartbeat_loop, daemon=True).start()
     socketserver.ThreadingTCPServer.allow_reuse_address = True
-    server = socketserver.ThreadingTCPServer(('127.0.0.1', PORT), Handler)
-    print(f"[*] Secure Bulletproof OpenAI Bridge running on http://127.0.0.1:{PORT}/v1")
+    server = socketserver.ThreadingTCPServer(('0.0.0.0', PORT), Handler)
+    print(f"[*] Secure Bulletproof OpenAI Bridge running on http://0.0.0.0:{PORT}/v1")
     print(f"[*] Connected to Newton Playground. Kernel Pool initialized with {len(kernel_pool.available_kernels)} kernels.")
     server.serve_forever()
